@@ -15,7 +15,7 @@ resource "oci_dns_zone" "FoggyKitchenDNSZone" {
 }
 
 resource "oci_dns_rrset" "FoggyKitchenDNSRecordSetA" {
-    provider       = oci.targetregion
+    provider        = oci.targetregion
     zone_name_or_id = oci_dns_zone.FoggyKitchenDNSZone.id
     domain          = oci_dns_zone.FoggyKitchenDNSZone.name
     rtype           = "A"

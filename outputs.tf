@@ -3,10 +3,6 @@ output "generated_ssh_private_key" {
   sensitive = true
 }
 
-output "dns_resolver" {
-  value = data.oci_dns_resolvers.FoggyKitchenDNSResolvers.resolvers[0].id
-}
-
-output "dns_resolver2" {
-  value = data.oci_core_vcn_dns_resolver_association.FoggyKitchenVCNDNSResolverAssociation
+output "public_server_ip_address" {
+  value     = oci_core_instance.FoggyKitchenPublicServer.public_ip
 }

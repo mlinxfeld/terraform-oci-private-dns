@@ -30,10 +30,12 @@ data "oci_core_images" "InstanceImageOCID" {
 }
 
 data "oci_dns_resolvers" "FoggyKitchenDNSResolvers" {
+    provider       = oci.targetregion
     compartment_id = oci_identity_compartment.FoggyKitchenCompartment.id
-    scope = "PRIVATE"
+    scope          = "PRIVATE"
 }
 
 data "oci_core_vcn_dns_resolver_association" "FoggyKitchenVCNDNSResolverAssociation" {
-    vcn_id = oci_core_vcn.FoggyKitchenVCN.id
+    provider = oci.targetregion
+    vcn_id   = oci_core_vcn.FoggyKitchenVCN.id
 }
