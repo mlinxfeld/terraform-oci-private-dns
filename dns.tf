@@ -17,6 +17,7 @@ resource "oci_dns_zone" "FoggyKitchenDNSZone" {
     view_id         = oci_dns_view.FoggyKitchenDNSView[count.index].id
 }
 
+/*
 resource "oci_dns_rrset" "FoggyKitchenDNSRecordSetA" {
     count           = var.enable_private_DNS ? 1 : 0
     provider        = oci.targetregion
@@ -27,12 +28,35 @@ resource "oci_dns_rrset" "FoggyKitchenDNSRecordSetA" {
     view_id         = oci_dns_view.FoggyKitchenDNSView[count.index].id
 
     items {
-      domain = oci_dns_zone.FoggyKitchenDNSZone[count.index].name
+      domain = "subdomain.${oci_dns_zone.FoggyKitchenDNSZone[count.index].name}"
       rtype  = "A"
       rdata  = oci_core_instance.FoggyKitchenPrivateServer.private_ip
       ttl    = 30
     } 
 
+}
+*/
+
+resource "oci_dns_record" "FoggyKitchenDNSPublicServerRecordA" {
+    count           = var.enable_private_DNS ? 1 : 0
+    provider        = oci.targetregion
+    zone_name_or_id = oci_dns_zone.FoggyKitchenDNSZone[count.index].id
+    domain          = "${var.public_server_domain_name}.${oci_dns_zone.FoggyKitchenDNSZone[count.index].name}"
+    rtype           = "A"
+    compartment_id  = oci_identity_compartment.FoggyKitchenCompartment.id
+    rdata           = oci_core_instance.FoggyKitchenPublicServer.private_ip
+    ttl             = 30
+}
+
+resource "oci_dns_record" "FoggyKitchenDNSPrivateServerRecordA" {
+    count           = var.enable_private_DNS ? 1 : 0
+    provider        = oci.targetregion
+    zone_name_or_id = oci_dns_zone.FoggyKitchenDNSZone[count.index].id
+    domain          = "${var.private_server_domain_name}.${oci_dns_zone.FoggyKitchenDNSZone[count.index].name}"
+    rtype           = "A"
+    compartment_id  = oci_identity_compartment.FoggyKitchenCompartment.id
+    rdata           = oci_core_instance.FoggyKitchenPrivateServer.private_ip
+    ttl             = 30
 }
 
 resource "oci_dns_resolver" "FoggyKitchenDNSResolver" {

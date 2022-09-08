@@ -17,6 +17,14 @@ variable "dns_domain" {
   default = "fkdns.me"
 }
 
+variable "public_server_domain_name" {
+  default = "foggykitchenpublicserver"
+}
+
+variable "private_server_domain_name" {
+  default = "foggykitchenprivateserver"
+}
+
 variable "network_cidrs" {
   type = map(string)
 

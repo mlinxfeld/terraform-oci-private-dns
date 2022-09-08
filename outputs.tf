@@ -11,6 +11,14 @@ output "public_server_private_ip_address" {
   value     = oci_core_instance.FoggyKitchenPublicServer.private_ip
 }
 
+output "public_server_dns_name" {
+  value     = "${var.public_server_domain_name}.${var.dns_domain}"
+}
+
 output "private_server_ip_address" {
   value     = oci_core_instance.FoggyKitchenPrivateServer.private_ip
+}
+
+output "private_server_dns_name" {
+  value     = "${var.private_server_domain_name}.${var.dns_domain}"
 }
