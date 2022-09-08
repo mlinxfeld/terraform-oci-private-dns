@@ -36,6 +36,7 @@ data "oci_dns_resolvers" "FoggyKitchenDNSResolvers" {
 }
 
 data "oci_core_vcn_dns_resolver_association" "FoggyKitchenVCNDNSResolverAssociation" {
+    count    = var.enable_private_DNS ? 1 : 0
     provider = oci.targetregion
     vcn_id   = oci_core_vcn.FoggyKitchenVCN.id
 }

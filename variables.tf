@@ -9,6 +9,14 @@ variable "availability_domain_name" {
   default = ""
 }
 
+variable "enable_private_DNS" {
+  default = false
+}
+
+variable "dns_domain" {
+  default = "fkdns.me"
+}
+
 variable "network_cidrs" {
   type = map(string)
 

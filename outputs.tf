@@ -3,6 +3,14 @@ output "generated_ssh_private_key" {
   sensitive = true
 }
 
-output "public_server_ip_address" {
+output "public_server_public_ip_address" {
   value     = oci_core_instance.FoggyKitchenPublicServer.public_ip
+}
+
+output "public_server_private_ip_address" {
+  value     = oci_core_instance.FoggyKitchenPublicServer.private_ip
+}
+
+output "private_server_ip_address" {
+  value     = oci_core_instance.FoggyKitchenPrivateServer.private_ip
 }
