@@ -18,7 +18,7 @@ variableGroups:
   visible: true  
   variables:
   - compartment_ocid
-  - availablity_domain_name
+  - availability_domain_name
   - dns_domain
   - enable_private_DNS
   - show_advanced 
@@ -74,7 +74,7 @@ variables:
     required: true
     visibile: true
 
-  availablity_domain_name:
+  availability_domain_name:
     type: oci:identity:availabilitydomain:name
     required: true
     visibile: true
