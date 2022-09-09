@@ -8,13 +8,13 @@ In this repository, I have documented my hands on experience with Terrafrom for 
 
 With the usage of this example HCL code you can build topology documented by diagram below. This topology is extremly simplified for education purposes and rather cannot be used for production implementations. 
 
-![](terraform-oci-oke-lb.png)
+![](terraform-oci-private-dns.png)
 
 ## How to use code 
 
 ### Deploy Using Oracle Resource Manager
 
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/mlinxfeld/terraform-oci-oke-lb/releases/latest/download/terraform-oci-oke-lb-stack-latest.zip)
+1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/mlinxfeld/terraform-oci-private-dns/releases/latest/download/terraform-oci-private-dns-stack-latest.zip)
 
     If you aren't already signed in, when prompted, enter the tenancy and user credentials.
 
@@ -39,8 +39,8 @@ With the usage of this example HCL code you can build topology documented by dia
 Clone the repo from GitHub.com by executing the command as follows and then go to terraform-oci-private-oke directory:
 
 ```
-[opc@terraform-server ~]$ git clone https://github.com/mlinxfeld/terraform-oci-oke-lb
-Cloning into 'terraform-oci-oke-lb'...
+[opc@terraform-server ~]$ git clone https://github.com/mlinxfeld/terraform-oci-private-dns
+Cloning into 'terraform-oci-private-dns'...
 remote: Enumerating objects: 29, done.
 remote: Counting objects: 100% (29/29), done.
 remote: Compressing objects: 100% (20/20), done.
@@ -48,27 +48,24 @@ remote: Total 29 (delta 9), reused 28 (delta 8), pack-reused 0
 Receiving objects: 100% (29/29), 308.42 KiB | 2.27 MiB/s, done.
 Resolving deltas: 100% (9/9), done.
 
-[opc@terraform-server ~]$ cd terraform-oci-oke-lb/
+[opc@terraform-server ~]$ cd terraform-oci-private-dns/
 
-[opc@terraform-server terraform-oci-oke-lb]$ ls -latr
+[opc@terraform-server terraform-oci-private-dns]$ ls -latr
 
-drwxr-xr-x  84 opc opc    2688 Aug 25 14:35 ..
--rw-r--r--   1 opc opc     292 Aug 25 14:37 compartment.tf
--rw-r--r--   1 opc opc    1314 Aug 25 14:37 locals.tf
--rw-r--r--@  1 opc opc  323681 Aug 25 14:37 terraform-oci-oke-lb.png
--rw-r--r--   1 opc opc      80 Aug 25 14:37 tls.tf
-drwxr-xr-x   4 opc opc     128 Aug 25 14:38 templates
-drwxr-xr-x   9 opc opc     288 Aug 25 14:49 .git
--rw-r--r--   1 opc opc     743 Aug 25 14:52 provider.tf
--rw-r--r--   1 opc opc    5027 Aug 25 15:07 schema.yaml
--rw-r--r--   1 opc opc    1968 Aug 25 16:36 oke.tf
--rw-r--r--   1 opc opc    1233 Aug 25 16:52 deploy_ngnix_and_service.tf
--rw-r--r--   1 opc opc     350 Aug 26 08:51 outputs.tf
--rw-r--r--   1 opc opc   13748 Aug 26 08:56 network.tf
-drwxr-xr-x  24 opc opc     768 Aug 26 11:45 .
--rw-r--r--   1 opc opc    2212 Aug 26 11:49 variables.tf
--rw-r--r--   1 opc opc    1366 Aug 26 11:49 datasources.tf
--rw-r--r--   1 opc opc   18299 Aug 26 11:51 README.md
+drwxr-xr-x  87 opc  opc   2784 Sep  6 12:20 ..
+-rw-r--r--   1 opc  opc    292 Sep  6 12:21 compartment.tf
+-rw-r--r--   1 opc  opc    743 Sep  6 12:22 provider.tf
+-rw-r--r--   1 opc  opc    244 Sep  6 12:54 locals.tf
+-rw-r--r--   1 opc  opc     77 Sep  6 12:55 tls.tf
+-rw-r--r--   1 opc  opc   3173 Sep  6 13:05 network.tf
+-rw-r--r--   1 opc  opc   1954 Sep  8 10:07 compute.tf
+-rw-r--r--   1 opc  opc  19528 Sep  8 10:13 README.md
+-rw-r--r--   1 opc  opc   1150 Sep  8 10:15 datasources.tf
+-rw-r--r--   1 opc  opc    688 Sep  8 13:02 terraform.tfvars
+-rw-r--r--   1 opc  opc    967 Sep  8 13:13 variables.tf
+-rw-r--r--   1 opc  opc   2802 Sep  8 13:14 dns.tf
+-rw-r--r--   1 opc  opc    675 Sep  8 13:28 outputs.tf
+drwxr-xr-x  20 opc  opc    640 Sep  8 14:37 .
 ```
 
 #### STEP 2.
@@ -76,9 +73,9 @@ drwxr-xr-x  24 opc opc     768 Aug 26 11:45 .
 Within web browser go to URL: https://www.terraform.io/downloads.html. Find your platform and download the latest version of your terraform runtime. Add directory of terraform binary into PATH and check terraform version:
 
 ```
-[opc@terraform-server terraform-oci-oke-lb]$ export PATH=$PATH:/home/opc/terraform
+[opc@terraform-server terraform-oci-private-dns]$ export PATH=$PATH:/home/opc/terraform
 
-[opc@terraform-server terraform-oci-oke-lb]$ terraform --version
+[opc@terraform-server terraform-oci-private-dns]$ terraform --version
 
 Terraform v1.0.0
 
@@ -90,22 +87,22 @@ is 1.2.2. You can update by downloading from https://www.terraform.io/downloads.
 Next create environment file with TF_VARs:
 
 ```
-[opc@terraform-server terraform-oci-oke-lb]$ vi setup_oci_tf_vars.sh
+[opc@terraform-server terraform-oci-private-dns]$ vi setup_oci_tf_vars.sh
 export TF_VAR_user_ocid="ocid1.user.oc1..aaaaaaaaob4qbf2(...)uunizjie4his4vgh3jx5jxa"
 export TF_VAR_tenancy_ocid="ocid1.tenancy.oc1..aaaaaaaas(...)krj2s3gdbz7d2heqzzxn7pe64ksbia"
 export TF_VAR_compartment_ocid="ocid1.tenancy.oc1..aaaaaaaasbktyckn(...)ldkrj2s3gdbz7d2heqzzxn7pe64ksbia"
 export TF_VAR_fingerprint="00:f9:d1:41:bb:57(...)82:47:e6:00"
-export TF_VAR_private_key_path="/tmp/oci_api_key.pem"
 export TF_VAR_region="eu-frankfurt-1"
+export TF_VAR_enable_private_DNS="false"
 
-[opc@terraform-server terraform-oci-oke-lb]$ source setup_oci_tf_vars.sh
+[opc@terraform-server terraform-oci-private-dns]$ source setup_oci_tf_vars.sh
 ```
 
 #### STEP 4.
 Run *terraform init* with upgrade option just to download the lastest neccesary providers:
 
 ```
-[opc@terraform-server terraform-oci-oke-lb]$ terraform init 
+[opc@terraform-server terraform-oci-private-dns]$ terraform init 
 
 Initializing the backend...
 
@@ -153,35 +150,46 @@ commands will detect it and remind you to do so if necessary.
 Run *terraform apply* to provision the content of this repo (type **yes** to confirm the the apply phase):
 
 ```
-[opc@terraform-server terraform-oci-oke-lb]$ terraform apply
+[opc@terraform-server terraform-oci-private-dns]$ terraform apply
 
-data.template_file.service_deployment: Reading...
-data.template_file.ngnix_deployment: Reading...
-data.template_file.ngnix_deployment: Read complete after 0s [id=f0a8ce1368a283350f8ff47169cc7b67b7a3982f346ef8b7b08dba250f931a41]
-data.template_file.service_deployment: Read complete after 0s [id=f5b35edf1e645d62b7b175ae4aa12e84bdc79ac61a25fe6c0c625f6125e8bbeb]
 data.oci_identity_region_subscriptions.home_region_subscriptions: Reading...
 data.oci_identity_availability_domains.ADs: Reading...
-data.oci_containerengine_node_pool_option.FoggyKitchenOKEClusterNodePoolOption: Reading...
-data.oci_containerengine_cluster_option.FoggyKitchenOKEClusterOption: Reading...
-data.oci_core_services.FoggyKitchenAllOCIServices: Reading...
-data.oci_identity_availability_domains.ADs: Read complete after 0s [id=IdentityAvailabilityDomainsDataSource-3269541301]
-data.oci_containerengine_cluster_option.FoggyKitchenOKEClusterOption: Read complete after 0s [id=ContainerengineClusterOptionDataSource-1870923232]
-data.oci_core_services.FoggyKitchenAllOCIServices: Read complete after 0s [id=CoreServicesDataSource-0]
-data.oci_identity_region_subscriptions.home_region_subscriptions: Read complete after 1s [id=IdentityRegionSubscriptionsDataSource-3269541301]
-data.oci_containerengine_node_pool_option.FoggyKitchenOKEClusterNodePoolOption: Read complete after 2s [id=ContainerengineNodePoolOptionDataSource-1870923232]
+data.oci_identity_availability_domains.ADs: Read complete after 1s [id=IdentityAvailabilityDomainsDataSource-3269541301]
+data.oci_identity_region_subscriptions.home_region_subscriptions: Read complete after 2s [id=IdentityRegionSubscriptionsDataSource-3269541301]
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
   + create
+ <= read (data resources)
 
 Terraform will perform the following actions:
 
-  # local_file.ngnix_deployment will be created
-  + resource "local_file" "ngnix_deployment" {
-      + content              = <<-EOT
-            apiVersion: apps/v1
-            kind: Deployment
-            metadata:
-              name: nginx-deployment
+  # data.oci_core_images.InstanceImageOCID will be read during apply
+  # (config refers to values not yet known)
+ <= data "oci_core_images" "InstanceImageOCID" {
+      + compartment_id           = (known after apply)
+      + id                       = (known after apply)
+      + images                   = (known after apply)
+      + operating_system         = "Oracle Linux"
+      + operating_system_version = "8"
+      + shape                    = "VM.Standard.E4.Flex"
+
+      + filter {
+          + name   = "display_name"
+          + regex  = true
+          + values = [
+              + "^.*Oracle[^G]*$",
+            ]
+        }
+    }
+
+  # data.oci_core_vcn_dns_resolver_association.FoggyKitchenVCNDNSResolverAssociation[0] will be read during apply
+  # (config refers to values not yet known)
+ <= data "oci_core_vcn_dns_resolver_association" "FoggyKitchenVCNDNSResolverAssociation" {
+      + dns_resolver_id = (known after apply)
+      + id              = (known after apply)
+      + state           = (known after apply)
+      + vcn_id          = (known after apply)
+    }
 
 (...)
 
@@ -189,10 +197,15 @@ Terraform will perform the following actions:
 
 (...)
 
-Plan: 22 to add, 0 to change, 0 to destroy.
+Plan: 16 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-  + cluster_instruction = (known after apply)
+  + generated_ssh_private_key        = (sensitive value)
+  + private_server_dns_name          = "foggykitchenprivateserver.fkdns.me"
+  + private_server_ip_address        = (known after apply)
+  + public_server_dns_name           = "foggykitchenpublicserver.fkdns.me"
+  + public_server_private_ip_address = (known after apply)
+  + public_server_public_ip_address  = (known after apply)
 
 Do you want to perform these actions?
   Terraform will perform the actions described above.
@@ -200,152 +213,202 @@ Do you want to perform these actions?
 
   Enter a value: yes
 
-local_file.ngnix_deployment: Creating...
-local_file.service_deployment: Creating...
 tls_private_key.public_private_key_pair: Creating...
-local_file.ngnix_deployment: Creation complete after 0s [id=219f897a9c01e21448850c71bfce9c803f404048]
-local_file.service_deployment: Creation complete after 0s [id=5c6473a813f00ced989c585a8fd4a3263f679fec]
 oci_identity_compartment.FoggyKitchenCompartment: Creating...
-tls_private_key.public_private_key_pair: Creation complete after 0s [id=cc8d1a6bfea84c7234673625b177a5b8fb0c9df0]
+tls_private_key.public_private_key_pair: Creation complete after 0s [id=1404f79cf998f51a3f2288172b1ce893bca67fb0]
 oci_identity_compartment.FoggyKitchenCompartment: Provisioning with 'local-exec'...
 oci_identity_compartment.FoggyKitchenCompartment (local-exec): Executing: ["/bin/sh" "-c" "sleep 60"]
 oci_identity_compartment.FoggyKitchenCompartment: Still creating... [10s elapsed]
 oci_identity_compartment.FoggyKitchenCompartment: Still creating... [20s elapsed]
+oci_identity_compartment.FoggyKitchenCompartment: Still creating... [30s elapsed]
+oci_identity_compartment.FoggyKitchenCompartment: Still creating... [40s elapsed]
+oci_identity_compartment.FoggyKitchenCompartment: Still creating... [50s elapsed]
+oci_identity_compartment.FoggyKitchenCompartment: Still creating... [1m0s elapsed]
+oci_identity_compartment.FoggyKitchenCompartment: Creation complete after 1m2s [id=ocid1.compartment.oc1..aaaaaaaayxvhhjidfxsq35muvshgxv62ac2mn6mi2yo2xqzsq53jgkuozfwq]
+data.oci_dns_resolvers.FoggyKitchenDNSResolvers: Reading...
 
 (...)
 
-null_resource.deploy_oke_ngnix (local-exec): Executing: ["/bin/sh" "-c" "sleep 60"]
-null_resource.deploy_oke_ngnix: Still creating... [10s elapsed]
-null_resource.deploy_oke_ngnix: Still creating... [20s elapsed]
-null_resource.deploy_oke_ngnix: Still creating... [30s elapsed]
-null_resource.deploy_oke_ngnix: Still creating... [40s elapsed]
-null_resource.deploy_oke_ngnix: Still creating... [50s elapsed]
-null_resource.deploy_oke_ngnix: Still creating... [1m0s elapsed]
-null_resource.deploy_oke_ngnix: Provisioning with 'local-exec'...
-null_resource.deploy_oke_ngnix (local-exec): Executing: ["/bin/sh" "-c" "kubectl get pods"]
-null_resource.deploy_oke_ngnix (local-exec): NAME                                READY   STATUS              RESTARTS   AGE
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-7vkbw   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-8bbb7   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-bb9qw   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-c7znx   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-c9tqr   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-kc9w8   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-kmvpv   1/1     Running             0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-ll6cz   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-vck49   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix (local-exec): nginx-deployment-85b9485b48-xq6d4   0/1     ContainerCreating   0          62s
-null_resource.deploy_oke_ngnix: Provisioning with 'local-exec'...
-null_resource.deploy_oke_ngnix (local-exec): Executing: ["/bin/sh" "-c" "kubectl get services"]
-null_resource.deploy_oke_ngnix (local-exec): NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-null_resource.deploy_oke_ngnix (local-exec): kubernetes   ClusterIP      10.96.0.1      <none>        443/TCP        5m9s
-null_resource.deploy_oke_ngnix (local-exec): lb-service   LoadBalancer   10.96.215.49   <pending>     80:30809/TCP   62s
-null_resource.deploy_oke_ngnix: Creation complete after 1m9s [id=8543360553551934017]
-
-Apply complete! Resources: 22 added, 0 changed, 0 destroyed.
+Plan: 11 to add, 0 to change, 0 to destroy.
 
 Outputs:
 
-cluster_instruction = <<EOT
-1.  Open OCI Cloud Shell.
+generated_ssh_private_key = <sensitive>
+private_server_dns_name = "foggykitchenprivateserver.fkdns.me"
+private_server_ip_address = "10.20.20.48"
+public_server_dns_name = "foggykitchenpublicserver.fkdns.me"
+public_server_private_ip_address = "10.20.10.89"
+public_server_public_ip_address = "130.61.150.212"
 
-2.  Execute below command to setup OKE cluster access:
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-$ oci ce cluster create-kubeconfig --region eu-frankfurt-1 --cluster-id ocid1.cluster.oc1.eu-frankfurt-1.aaaaaaaanggrohu6zwracw7c5hz5ryiyqckanmrvmv5erqabac43rqf7aq7q
+  Enter a value: yes
 
-3.  Get PODs names:
-
-$ kubectl get pods
-
-4.  Get services
-
-$ kubectl get services
-```
-
-#### STEP 6.
-After testing the environment you can remove the OCI OKE infra. You should just run *terraform destroy* (type **yes** for confirmation of the destroy phase):
-
-```
-lfeldman@lfeldman-mac terraform-oci-oke-lb % terraform destroy -auto-approve
-data.template_file.ngnix_deployment: Reading...
-tls_private_key.public_private_key_pair: Refreshing state... [id=1a015e3f39eaf45f95ef1f3081784f9bb44bf5c7]
-data.template_file.ngnix_deployment: Read complete after 0s [id=f0a8ce1368a283350f8ff47169cc7b67b7a3982f346ef8b7b08dba250f931a41]
-local_file.ngnix_deployment: Refreshing state... [id=219f897a9c01e21448850c71bfce9c803f404048]
-data.oci_identity_region_subscriptions.home_region_subscriptions: Reading...
-data.oci_containerengine_node_pool_option.FoggyKitchenOKEClusterNodePoolOption: Reading...
-data.oci_containerengine_cluster_option.FoggyKitchenOKEClusterOption: Reading...
-data.oci_core_services.FoggyKitchenAllOCIServices: Reading...
-data.oci_identity_availability_domains.ADs: Reading...
-oci_core_public_ip.FoggyKitchenLBPublicIP: Refreshing state... [id=ocid1.publicip.oc1.eu-frankfurt-1.amaaaaaanlc5nbyaucn5a3tr2troaohtqemq7ufe4ggztvne7atjrehzs66q]
-data.oci_identity_availability_domains.ADs: Read complete after 0s [id=IdentityAvailabilityDomainsDataSource-3269541301]
-data.template_file.service_deployment: Reading...
-data.template_file.service_deployment: Read complete after 0s [id=cdc20c92569989afbc92901f3bbe22893f71733a7ee0ccdb7a709c60961b1d2a]
-data.oci_containerengine_cluster_option.FoggyKitchenOKEClusterOption: Read complete after 0s [id=ContainerengineClusterOptionDataSource-1870923232]
-local_file.service_deployment: Refreshing state... [id=d95f1608c7d5ac837802281ea8b963dbac928fe8]
-data.oci_core_services.FoggyKitchenAllOCIServices: Read complete after 0s [id=CoreServicesDataSource-0]
-data.oci_identity_region_subscriptions.home_region_subscriptions: Read complete after 1s [id=IdentityRegionSubscriptionsDataSource-3269541301]
-oci_identity_compartment.FoggyKitchenCompartment: Refreshing state... [id=ocid1.compartment.oc1..aaaaaaaayxvhhjidfxsq35muvshgxv62ac2mn6mi2yo2xqzsq53jgkuozfwq]
-oci_core_virtual_network.FoggyKitchenVCN: Refreshing state... [id=ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaanlc5nbyacxl4omndsdwzpjqvzfbmk6nl5oterpmvrwc3slrq56xq]
-oci_core_network_security_group.FoggyKitchenNSG: Refreshing state... [id=ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaa7zjrfcea2mcmwvcjzvr5lyurel74qvloj4jdqz2ewy7sjoul3s4q]
-oci_core_internet_gateway.FoggyKitchenInternetGateway: Refreshing state... [id=ocid1.internetgateway.oc1.eu-frankfurt-1.aaaaaaaatalepj5cbuznbhfe7zw6k2pt5mhbowdgfp7unbnvvwvjoelns7fq]
-oci_core_nat_gateway.FoggyKitchenNATGateway: Refreshing state... [id=ocid1.natgateway.oc1.eu-frankfurt-1.aaaaaaaahukzrzejzie364enn6vdmyad5xq52sbfb2kwya6utzhetguxljsq]
-oci_core_service_gateway.FoggyKitchenServiceGateway: Refreshing state... [id=ocid1.servicegateway.oc1.eu-frankfurt-1.aaaaaaaay27u6jqpuxcxcv2psdun3jdp7bcw2ks5y644tfcgrhj5wzb4bxua]
-oci_core_security_list.FoggyKitchenOKELBSecurityList: Refreshing state... [id=ocid1.securitylist.oc1.eu-frankfurt-1.aaaaaaaadqy2mqbomrlfaefrf27ioqbj27e5zg3fxnqpjaxcrvrbtsovrz4q]
-oci_core_security_list.FoggyKitchenOKEAPIEndpointSecurityList: Refreshing state... [id=ocid1.securitylist.oc1.eu-frankfurt-1.aaaaaaaahv53cpounrlhdjtvtgnejat2kfevrer27ynrsrxqu5byrazyn7sq]
-oci_core_security_list.FoggyKitchenOKENodesSecurityList: Refreshing state... [id=ocid1.securitylist.oc1.eu-frankfurt-1.aaaaaaaar3dd2c5midz26ptcs7xwmkfdemxdhemzaia73ud5x3qztzrwz5ia]
-oci_core_network_security_group_security_rule.FoggyKitchenNSGRule6443: Refreshing state... [id=DA1BB9]
-oci_core_network_security_group_security_rule.FoggyKitchenNSGRule12250: Refreshing state... [id=4F4991]
-oci_core_route_table.FoggyKitchenVCNPrivateRouteTable: Refreshing state... [id=ocid1.routetable.oc1.eu-frankfurt-1.aaaaaaaamlo46dji53fmkkg5yidiyiy5gwyajydsuangzldqhhxjfwxpzbpq]
-data.oci_containerengine_node_pool_option.FoggyKitchenOKEClusterNodePoolOption: Read complete after 2s [id=ContainerengineNodePoolOptionDataSource-1870923232]
-oci_core_route_table.FoggyKitchenVCNPublicRouteTable: Refreshing state... [id=ocid1.routetable.oc1.eu-frankfurt-1.aaaaaaaaivzdqsivqysv2llgsqd44vgu6aiudcihvahmh5dfmctu2blaeuhq]
-oci_core_subnet.FoggyKitchenOKENodesPodsSubnet: Refreshing state... [id=ocid1.subnet.oc1.eu-frankfurt-1.aaaaaaaa5b3cjhugmz26oyzanelfsuy22o37glee2hho7zbvjh2kluesbkgq]
-oci_core_subnet.FoggyKitchenOKELBSubnet: Refreshing state... [id=ocid1.subnet.oc1.eu-frankfurt-1.aaaaaaaahplk2muvclpbsf2bczo2wjjlc3sla72zhjxxj4tmevifqvc7ar3a]
-oci_core_subnet.FoggyKitchenOKEAPIEndpointSubnet: Refreshing state... [id=ocid1.subnet.oc1.eu-frankfurt-1.aaaaaaaaukkrvpe7jkesaz3sau3cdckug3yq7vrvo4lytfwsrqwruv54h6ma]
-oci_containerengine_cluster.FoggyKitchenOKECluster: Refreshing state... [id=ocid1.cluster.oc1.eu-frankfurt-1.aaaaaaaa3k2vyzd7oeegdyr7dqok5gxjr3ucjax3lruunfadtcekftdb6lmq]
-oci_containerengine_node_pool.FoggyKitchenOKENodePool: Refreshing state... [id=ocid1.nodepool.oc1.eu-frankfurt-1.aaaaaaaabk4yv3hwp3ftp737gz4mhynfinqdct2kmgqnnyuq4nwyeoz4anza]
-null_resource.deploy_oke_ngnix: Refreshing state... [id=3621386567860012434]
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  - destroy
-
-Terraform will perform the following actions:
-
-  # local_file.ngnix_deployment will be destroyed
-  - resource "local_file" "ngnix_deployment" {
-      - content              = <<-EOT
-            apiVersion: apps/v1
-            kind: Deployment
-            metadata:
-              name: nginx-deployment
-            spec:
-              selector:
-                matchLabels:
-                  app: nginx
-              replicas: 10
-              template:
-                metadata:
-                  labels:
-                    app: nginx
-                spec:
-                  containers:
-                  - name: nginx
-                    image: nginx:1.14.2
-                    ports:
-                    - containerPort: 80
-                    resources:
-                      requests:
-                        memory: "500Mi"
-        EOT -> null
-      - directory_permission = "0777" -> null
-      - file_permission      = "0777" -> null
-      - filename             = "./ngnix.yaml" -> null
-      - id                   = "219f897a9c01e21448850c71bfce9c803f404048" -> null
-    }
+tls_private_key.public_private_key_pair: Creating...
+oci_identity_compartment.FoggyKitchenCompartment: Creating...
+tls_private_key.public_private_key_pair: Creation complete after 1s [id=ede1cddcaaaaed24abeeb719cfff2eadc17f40da]
+oci_identity_compartment.FoggyKitchenCompartment: Provisioning with 'local-exec'...
+oci_identity_compartment.FoggyKitchenCompartment (local-exec): Executing: ["/bin/sh" "-c" "sleep 60"]
+oci_identity_compartment.FoggyKitchenCompartment: Still creating... [10s elapsed]
+oci_identity_compartment.FoggyKitchenCompartment: Still creating... [21s elapsed]
 
 (...)
 
-oci_core_virtual_network.FoggyKitchenVCN: Destruction complete after 1s
+oci_core_instance.FoggyKitchenPrivateServer: Still creating... [30s elapsed]
+oci_core_instance.FoggyKitchenPublicServer: Creation complete after 35s [id=ocid1.instance.oc1.eu-frankfurt-1.antheljsnlc5nbycqr2ldwpqv7r7t5dbdquodv2i3wbuarcnxh3iebcvwq3q]
+oci_core_instance.FoggyKitchenPrivateServer: Creation complete after 35s [id=ocid1.instance.oc1.eu-frankfurt-1.antheljsnlc5nbyclcowck5wnb2bsqh36g5ofvnshcwtbagaon7d6v4poqyq]
+
+Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+generated_ssh_private_key = <sensitive>
+private_server_dns_name = "foggykitchenprivateserver.fkdns.me"
+private_server_ip_address = "10.20.20.143"
+public_server_dns_name = "foggykitchenpublicserver.fkdns.me"
+public_server_private_ip_address = "10.20.10.238"
+public_server_public_ip_address = "130.61.147.55"
+```
+
+#### STEP 6. 
+Now we need to enable DNS resources (TF_VAR_enable_private_DNS=true) and run terraform apply again:
+
+```
+[opc@terraform-server terraform-oci-private-dns]$ export TF_VAR_enable_private_DNS="true"
+
+[opc@terraform-server terraform-oci-private-dns]$ terraform apply -auto-approve
+tls_private_key.public_private_key_pair: Refreshing state... [id=ede1cddcaaaaed24abeeb719cfff2eadc17f40da]
+data.oci_identity_availability_domains.ADs: Reading...
+data.oci_identity_region_subscriptions.home_region_subscriptions: Reading...
+data.oci_identity_availability_domains.ADs: Read complete after 1s [id=IdentityAvailabilityDomainsDataSource-3269541301]
+data.oci_identity_region_subscriptions.home_region_subscriptions: Read complete after 0s [id=IdentityRegionSubscriptionsDataSource-3269541301]
+oci_identity_compartment.FoggyKitchenCompartment: Refreshing state... [id=ocid1.compartment.oc1..aaaaaaaayxvhhjidfxsq35muvshgxv62ac2mn6mi2yo2xqzsq53jgkuozfwq]
+oci_core_vcn.FoggyKitchenVCN: Refreshing state... [id=ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaanlc5nbyaitqa3wymdnkd27qotlsszxur52v5dd2dprhsuv5t4eoq]
+data.oci_dns_resolvers.FoggyKitchenDNSResolvers: Reading...
+data.oci_core_images.InstanceImageOCID: Reading...
+
+(...)
+
+Plan: 5 to add, 0 to change, 0 to destroy.
+oci_dns_view.FoggyKitchenDNSView[0]: Creating...
+oci_dns_view.FoggyKitchenDNSView[0]: Creation complete after 1s [id=ocid1.dnsview.oc1.eu-frankfurt-1.amaaaaaanlc5nbyabicdvzvw56b4jwh52hk35xyg7tumvvy3ffimzkeg57qa]
+oci_dns_resolver.FoggyKitchenDNSResolver[0]: Creating...
+oci_dns_zone.FoggyKitchenDNSZone[0]: Creating...
+oci_dns_zone.FoggyKitchenDNSZone[0]: Creation complete after 1s [id=ocid1.dns-zone.oc1.eu-frankfurt-1.aaaaaaaa3v6uklr3ja5vfep7nkd4swso6haevpuld2pyobuul3vanfuypyjq]
+oci_dns_record.FoggyKitchenDNSPublicServerRecordA[0]: Creating...
+oci_dns_record.FoggyKitchenDNSPrivateServerRecordA[0]: Creating...
+oci_dns_record.FoggyKitchenDNSPublicServerRecordA[0]: Creation complete after 0s [id=d1c8dfc10d1904eea5f992eaafe5faff]
+oci_dns_record.FoggyKitchenDNSPrivateServerRecordA[0]: Creation complete after 1s [id=de024597dc1825442ff7ddb13979ad19]
+oci_dns_resolver.FoggyKitchenDNSResolver[0]: Creation complete after 8s [id=ocid1.dnsresolver.oc1.eu-frankfurt-1.amaaaaaanlc5nbyani4t67kt4ffovxxgtbdb5yfgtmhrssvwdgo2fehsyaqq]
+
+
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+generated_ssh_private_key = <sensitive>
+private_server_dns_name = "foggykitchenprivateserver.fkdns.me"
+private_server_ip_address = "10.20.20.143"
+public_server_dns_name = "foggykitchenpublicserver.fkdns.me"
+public_server_private_ip_address = "10.20.10.238"
+public_server_public_ip_address = "130.61.147.55"
+```
+
+#### STEP 7.
+Now you can access you public server and ping DNS names of public one and private one. But first you need to download generated private key:
+
+```
+[opc@terraform-server terraform-oci-private-dns]$ terraform console
+> nonsensitive(tls_private_key.public_private_key_pair.private_key_pem)
+<<EOT
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEA6Y6/zoTzIHCMFrvDwc4kFLhQYHI/73+qkoVV1xnIebcwkIo0
+PFlEc+hAI4sj1nIPH4f+QujxfKkzS8rsiGKrzkvecZ1HOvxcCWNc3BpERcjXv5r3
+KFJiUIFBjcMkH1hjAWboiAH+WIkYlZjLBz+7g5lGo6MIL9DrPk/YlnDZfdvOSiCx
+(...)
+gBLmIAbyzekMTartsNeEkBiaxbw4G/s3U9vrJlNAimTLIdv7LmBXFclhFO86wG04
+ARZjpJ8CgYEAv70a9I7oaMz72Q57QfgGPerQd3pfS37cBAERRtl8VSHpEmxKNBgN
+ikS9t/c4yBfwLhSqsCjJDlUktwJYxLwrECytIovCe2En45qXIqeM3wW+PliOwWbq
+41W0RkX6etXMf9HCT3V4LNQie6yjCyzN9XWlalSjBOQRNS15zMYXkmo=
+-----END RSA PRIVATE KEY-----
+
+EOT
+
+
+[opc@terraform-server terraform-oci-private-dns]$ vi id_rsa
+
+[opc@terraform-server terraform-oci-private-dns]$ chmod 400 id_rsa
+
+
+[opc@terraform-server terraform-oci-private-dns]$ scp -i id_rsa id_rsa opc@130.61.147.55:/home/opc/
+The authenticity of host '130.61.147.55 (130.61.147.55)' can't be established.
+ED25519 key fingerprint is SHA256:HCfma1NaiYcJIzpLSS+DOpkT2PQHOk3FWppUSspA1Ms.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '130.61.147.55' (ED25519) to the list of known hosts.
+
+id_rsa               100% 1679    48.4KB/s   00:00
+
+[opc@terraform-server terraform-oci-private-dns]$ ssh -i id_rsa opc@130.61.147.55
+
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Fri Sep  9 12:29:03 2022 from 89.64.90.185
+
+[opc@foggykitchenpublicserver ~]$ ping foggykitchenpublicserver.fkdns.me
+
+PING foggykitchenpublicserver.fkdns.me (10.20.10.238) 56(84) bytes of data.
+64 bytes from foggykitchenpublicserver.pubsub.fkvcn.oraclevcn.com (10.20.10.238): icmp_seq=1 ttl=64 time=0.037 ms
+64 bytes from foggykitchenpublicserver.pubsub.fkvcn.oraclevcn.com (10.20.10.238): icmp_seq=2 ttl=64 time=0.047 ms
+^C
+--- foggykitchenpublicserver.fkdns.me ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1023ms
+rtt min/avg/max/mdev = 0.037/0.042/0.047/0.005 ms
+
+[opc@foggykitchenpublicserver ~]$ ssh -i id_rsa opc@foggykitchenprivateserver.fkdns.me
+
+The authenticity of host 'foggykitchenprivateserver.fkdns.me (10.20.20.143)' can't be established.
+ECDSA key fingerprint is SHA256:8cS7+RRvpPEAgBwqEERddtgMx9ujCmhleuN3KgLfbyg.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'foggykitchenprivateserver.fkdns.me,10.20.20.143' (ECDSA) to the list of known hosts.
+Activate the web console with: systemctl enable --now cockpit.socket
+
+[opc@foggykitchenprivateserver ~]$ exit
+logout
+Connection to foggykitchenprivateserver.fkdns.me closed.
+[opc@foggykitchenpublicserver ~]$ exit
+logout
+Connection to 130.61.147.55 closed.
+
+```
+
+#### STEP 8.
+After testing the environment you can remove the OCI OKE infra. You should just run *terraform destroy* (type **yes** for confirmation of the destroy phase):
+
+```
+[opc@terraform-server terraform-oci-private-dns]$ terraform destroy -auto-approve
+
+tls_private_key.public_private_key_pair: Refreshing state... [id=ede1cddcaaaaed24abeeb719cfff2eadc17f40da]
+data.oci_identity_availability_domains.ADs: Reading...
+data.oci_identity_region_subscriptions.home_region_subscriptions: Reading...
+data.oci_identity_availability_domains.ADs: Read complete after 2s [id=IdentityAvailabilityDomainsDataSource-3269541301]
+data.oci_identity_region_subscriptions.home_region_subscriptions: Read complete after 1s [id=IdentityRegionSubscriptionsDataSource-3269541301]
+oci_identity_compartment.FoggyKitchenCompartment: Refreshing state... [id=ocid1.compartment.oc1..aaaaaaaayxvhhjidfxsq35muvshgxv62ac2mn6mi2yo2xqzsq53jgkuozfwq]
+data.oci_dns_resolvers.FoggyKitchenDNSResolvers: Reading...
+oci_dns_view.FoggyKitchenDNSView[0]: Refreshing state... [id=ocid1.dnsview.oc1.eu-frankfurt-1.amaaaaaanlc5nbyabicdvzvw56b4jwh52hk35xyg7tumvvy3ffimzkeg57qa]
+oci_core_vcn.FoggyKitchenVCN: Refreshing state... [id=ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaanlc5nbyaitqa3wymdnkd27qotlsszxur52v5dd2dprhsuv5t4eoq]
+data.oci_core_images.InstanceImageOCID: Reading...
+
+(...)
+
+oci_core_internet_gateway.FoggyKitchenInternetGateway: Destroying... [id=ocid1.internetgateway.oc1.eu-frankfurt-1.aaaaaaaajvkm2ylrbbonytwuoum4cmm5ohhop4nsj7udmzfcvm74pnzymqda]
+oci_core_internet_gateway.FoggyKitchenInternetGateway: Destruction complete after 1s
+oci_core_vcn.FoggyKitchenVCN: Destroying... [id=ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaanlc5nbyaitqa3wymdnkd27qotlsszxur52v5dd2dprhsuv5t4eoq]
+oci_core_vcn.FoggyKitchenVCN: Destruction complete after 1s
 oci_identity_compartment.FoggyKitchenCompartment: Destroying... [id=ocid1.compartment.oc1..aaaaaaaayxvhhjidfxsq35muvshgxv62ac2mn6mi2yo2xqzsq53jgkuozfwq]
 oci_identity_compartment.FoggyKitchenCompartment: Destruction complete after 0s
 
-Destroy complete! Resources: 23 destroyed.
+Destroy complete! Resources: 16 destroyed.
 ```
