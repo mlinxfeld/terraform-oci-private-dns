@@ -1,0 +1,185 @@
+title: "FoggyKitchen.com - OCI Private DNS deployed with Terraform"
+description: "FoggyKitchen.com - OCI Private DNS deployed with Terraform."
+stackDescription: "FoggyKitchen.com - OCI Private DNS deployed with Terraform."
+schemaVersion: 1.1.0
+version: "20201028"
+locale: "en"
+
+variableGroups:
+- title: "General Configuration"
+  visible: false
+  variables:
+  - tenancy_ocid
+  - region
+  - network_cidrs
+  - instance_os
+
+- title: "Required Configuration"
+  visible: true  
+  variables:
+  - compartment_ocid
+  - availablity_domain_name
+  - dns_domain
+  - enable_private_DNS
+  - show_advanced 
+
+- title: "DNS Configuration"
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - public_server_domain_name
+  - private_server_domain_name
+  - dns_a_record_ttl
+
+- title: "Compute Optional Configuration"
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - shape
+  - flex_shape_memory
+  - flex_shape_ocpus
+  - instance_os
+  - linux_os_version
+
+variables:
+
+  show_advanced:
+    type: boolean
+    title: "Show advanced options?"
+    description: "Shows advanced options."
+    visible: true
+    default: false
+
+  # General Configuration
+  tenancy_ocid:
+    title: "Tenancy ID"
+    description: "The Oracle Cloud Identifier (OCID) for your tenancy"
+    type: string
+    required: true
+    visibile: false
+
+  region:
+    title: "Region"
+    description: "Choose Region where you deploy your Webserver"
+    type: oci:identity:region:name
+    required: true
+    visibile: true
+
+  compartment_ocid:
+    title: "Compartment OCID"
+    description: "Choose Comparment where you deploy your Webserver"
+    type: oci:identity:compartment:id
+    required: true
+    visibile: true
+
+  availablity_domain_name:
+    type: oci:identity:availabilitydomain:name
+    required: true
+    visibile: true
+    title: "Availability Domain"
+    description: "Choose Availability Domain where OKE Nodes will be deployed."
+    dependsOn:
+      regionName: ${region}
+      compartmentId: ${compartment_ocid}
+
+  dns_domain:
+    type: string
+    required: true
+    title: "Private DNS Domain Name"
+    description: "Choose the name for your Private DNS Domain."
+
+  enable_private_DNS:
+    type: boolean
+    title: "Enable Private DNS?"
+    description: "Choose on the second round of Terraform Apply to deploy Private DNS resources."
+    visible: true
+    default: false
+
+  # Optional Configuration
+
+  dns_a_record_ttl:
+    type: number
+    required: false
+    minimum: 30
+    maximum: 128
+    multipleOf: 1
+    default: 30
+    title: "DNS A Record TTL"
+    description: "Choose DNS A Record TTL."
+
+  shape:
+    type: oci:core:instanceshape:name
+    title: "Shape"
+    description: "Choose a shape for your compute instances"
+    default: "VM.Standard.E4.Flex"
+    required: false
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  flex_shape_ocpus:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 2
+    title: "Compute Flex Shape OCPUs"
+    description: "Choose number of OCPUs for Flex Shape."
+    visible:
+      and:
+        - or:
+          - eq:
+            - shape
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - shape
+            - "VM.Standard.E4.Flex"
+          - eq:
+            - shape
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - shape 
+            - "VM.Optimized3.Flex"
+
+  flex_shape_memory:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 16
+    title: "Compute Flex Shape Memory (GB)"
+    description: "Choose number GB for Flex Shape Memory."
+    visible:
+      and:
+        - or:
+          - eq:
+            - shape
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - shape
+            - "VM.Standard.E4.Flex"
+          - eq:
+            - shape
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - shape
+            - "VM.Optimized3.Flex"
+
+  linux_os_version:
+    type: enum
+    required: false
+    visible: true
+    title: "Oracle Linux version"
+    description: "Choose Oracle Linux version for compute instances"
+    default: "8"
+    enum:
+      - "9"  
+      - "8"
+
+  
+
+
+

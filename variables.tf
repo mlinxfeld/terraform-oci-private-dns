@@ -17,6 +17,10 @@ variable "dns_domain" {
   default = "fkdns.me"
 }
 
+variable "dns_a_record_ttl" {
+  default = 30
+}
+
 variable "public_server_domain_name" {
   default = "foggykitchenpublicserver"
 }
